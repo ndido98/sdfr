@@ -10,8 +10,8 @@ from tqdm import tqdm
 # Settings
 ###########################################################
 output_path = 'E:\\StableDiffusion\\'
-input_file_with_names = 'celeb_names_2'
-batch_size = 4
+input_file_with_names = 'all_humans.txt'
+batch_size = 8
 how_many_batches = 8
 ###########################################################
 
@@ -33,9 +33,11 @@ with open(input_file_with_names, 'r', encoding="utf8") as f:
 
 response = requests.post(url=f'{url}/sdapi/v1/options', json=option_payload)
 
-for name in tqdm(names):
+for name in tqdm(names[:5]):
 
-    directory = join(output_path, ' '.join(name.split(' ')[:2]))
+    name = ''.join(name.split('|')[0])
+
+    directory = join(output_path, name)
     if not os.path.exists(directory):
         os.makedirs(directory)
 
@@ -47,6 +49,8 @@ for name in tqdm(names):
         seed = random.randint(1, 999999999)
 
         feature = 'RAW photo of ' + name
+
+        # print(feature)
 
         payload = {
             "prompt": feature,
