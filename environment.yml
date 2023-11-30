@@ -1,0 +1,20 @@
+name: sdfr
+channels:
+  - nodefaults
+  - conda-forge
+  - pytorch
+  - nvidia
+dependencies:
+  - python<3.11
+  - numpy
+  - pandas
+  - opencv>=4.8
+  - cudatoolkit=11.8
+  - cudnn=8.8
+  - pytorch-cuda=11.8
+  - pytorch>=2.1
+  - torchvision>=0.16
+  - aiohttp
+  - aiodns
+  - tqdm
+  - submitit
