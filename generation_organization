@@ -4,6 +4,9 @@ Si parte sempre dall'inizio del file all_humans.txt.
 Cercate sempre di generare con batch size da 8, per 8 volte (quindi 64 immagini per ogni soggetto).
 
 Nel mio pc (i9 + 3080Ti) ci si mette circa 230 secondi per generare le 64 immagini di un soggetto.
-Per generare un blocco da 500 sono necessari quindi 230 * 500 = 115k/60 = 32 ore
+Per generare un blocco da 500 sono necessari quindi 230 * 500 = 115k/3600 = 32 ore
 
 0 - 500: Guido
+501 - 1000: Nicolò
+1001 - 1500: Matteo
+1501 - 2000: Lorenzo
