@@ -79,5 +79,5 @@ if __name__ == "__main__":
 
     distance_theshold = 0.4
 
-    extract_embeddings(dataset_path, embedding_path)
+    # extract_embeddings(dataset_path, embedding_path)
     compute_similarity(embedding_path, output_file_name, distance_theshold)

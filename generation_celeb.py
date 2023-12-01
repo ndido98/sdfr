@@ -10,7 +10,7 @@ from tqdm import tqdm
 # Settings
 ###########################################################
 output_path = 'E:\\StableDiffusion\\'
-input_file_with_names = 'all_humans.txt'
+input_file_with_names = 'dataset_generator\\all_humans.txt'
 batch_size = 8
 how_many_batches = 8
 ###########################################################
@@ -33,7 +33,7 @@ with open(input_file_with_names, 'r', encoding="utf8") as f:
 
 response = requests.post(url=f'{url}/sdapi/v1/options', json=option_payload)
 
-for name in tqdm(names[:5]):
+for name in tqdm(names[:500]):
 
     name = ''.join(name.split('|')[0])
 
