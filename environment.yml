@@ -1,20 +1,34 @@
 name: sdfr
 channels:
   - nodefaults
-  - conda-forge
   - pytorch
   - nvidia
+  - thombashi
+  - conda-forge
 dependencies:
   - python<3.11
+  - pip
   - numpy
+  - scipy
   - pandas
   - opencv>=4.8
-  - cudatoolkit=11.8
-  - cudnn=8.8
   - pytorch-cuda=11.8
-  - pytorch>=2.1
+  - pytorch>=2.1,<2.2
   - torchvision>=0.16
+  - deepface
   - aiohttp
   - aiodns
   - tqdm
   - submitit
+  - pathvalidate
+  - torchmetrics
+  - lightning
+  - wandb
+  - graph-tool
+  - pip:
+      - facenet-pytorch
+      - albumentations --no-binary qudida,albumentations
+      - onnx
+      - onnxruntime-gpu
+      - jsonargparse[signatures]
+      - omegaconf

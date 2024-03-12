@@ -200,3 +200,4 @@ wandb
 
 # Log directory for training runs
 sdfr
+!devkit/sdfr
