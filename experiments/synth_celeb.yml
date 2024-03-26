@@ -1,0 +1,28 @@
+data:
+  batch_size: 128
+  train_datasets:
+    - root: /mnt/d/datasets/sdfr-dataset-aligned
+      indices_file: /mnt/d/datasets/sdfr-dataset-aligned/threshold=0.5970134557846706_cosine_images.txt
+      train_from_class: 1000
+      val_to_class: 1000
+      val_max_images_per_class: 3
+      val_max_matches_per_image: 2
+      val_max_nonmatches_per_image: 2
+      augment: adaface
+
+model:
+  backbone: iresnet50
+  n_classes: 17684
+  normalize: true
+  margin: 0.4
+  h: 0.333
+  s: 64.0
+  t_alpha: 1.0
+  distance_fn: cosine
+  lr: 0.1
+  momentum: 0.9
+  lr_milestones: [12, 20, 24]
+  lr_gamma: 0.1
+
+trainer:
+  max_epochs: 100
