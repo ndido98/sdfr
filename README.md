@@ -38,3 +38,38 @@ To test the model, run:
 ```bash
 python main.py test -c experiments/test.yml -c experiments/experiment_file_here.yml --trainer.logger.init_args.id wandb_run_id --ckpt_path /path/to/checkpoint
 ```
+
+## Forbidden datasets
+
+To generate our celebrities dataset with Stable Diffusion, run the following commands:
+
+```bash	
+cd dataset_generator
+python query_all_occupations.py
+```
+
+This will download from Wikidata a .csv file containing the subjects that will be generated.
+
+To generate the dataset, we use [Stable Diffusion WebUI](https://github.com/AUTOMATIC1111/stable-diffusion-webui),
+packaged in a [Singularity](https://docs.sylabs.io/guides/latest/user-guide/) image to allow for multi-node multi-GPU processing in a SLURM environment.
+
+First, build the Singularity image:
+
+```bash
+cd dataset_generator/stable-diffusion-webui
+sudo singularity build stable-diffusion-webui.sif stable-diffusion-webui.def
+```
+
+Then, run the following command to generate the dataset:
+
+```bash
+cd dataset_generator
+python generate.py --prompts all_humans.csv --output /your/dataset_dir --n_nodes 1 --n_gpus_per_node 1 --batch_size 64
+```
+
+After generating the dataset, extract the ArcFace features and filter it:
+
+```bash
+python extract_embeddings.py --dataset /your/dataset_dir --num-workers 8
+python filter.py --dataset /your/dataset_dir --output /your/classes/file.txt --min-images-per-class 4 --distance-metric cosine --distance-threshold 0.597 --n-jobs -1
+```

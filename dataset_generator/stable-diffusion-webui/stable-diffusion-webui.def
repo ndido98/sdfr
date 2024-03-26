@@ -1,0 +1,40 @@
+# Singularity definition file to build the Stable Diffusion WebUI image
+Bootstrap: library
+From: ubuntu:22.04
+
+%files
+    webui-user.sh /
+
+%post
+    apt-get update
+    apt-get install -y wget curl git unzip python3.10 python3.10-venv python3-pip libgl1 libglib2.0-0 pciutils
+    git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git --depth 1
+    mv /stable-diffusion-webui /sdiff-webui
+    wget https://huggingface.co/SG161222/Realistic_Vision_V5.1_noVAE/resolve/main/Realistic_Vision_V5.1.safetensors -O /sdiff-webui/models/Stable-diffusion/Realistic_Vision_V5.1.safetensors
+    rm /sdiff-webui/webui-user.sh
+    mv /webui-user.sh /sdiff-webui/webui-user.sh
+    cd /sdiff-webui
+    git config --system --add safe.directory '*'
+    wget https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh -O /sdiff-webui/wait-for-it.sh
+    chmod 0777 -R /sdiff-webui
+    export HUGGINGFACE_HUB_CACHE=/sdiff-webui/.cache/huggingface
+    ./webui.sh -f --api --nowebui --no-hashing --xformers --api-server-stop --skip-torch-cuda-test --use-cpu all --precision full --no-half --port 20202 &
+    SERVER_PID=$!
+    /sdiff-webui/wait-for-it.sh 127.0.0.1:20202 --timeout=0
+    sleep 60
+    curl -X POST -H "Content-Type: application/json" -d '{"sd_model_checkpoint": "Realistic_Vision_V5.1.safetensors"}' http://127.0.0.1:20202/sdapi/v1/options
+    sleep 60
+    curl -X POST -H "Content-Type: application/json" http://127.0.0.1:20202/sdapi/v1/server-stop
+    sleep 60
+    curl -X POST -H "Content-Type: application/json" http://127.0.0.1:20202/sdapi/v1/server-kill || true
+    rm /sdiff-webui/wait-for-it.sh
+    kill $SERVER_PID || true
+    sleep 1
+    chmod 0777 -R /sdiff-webui
+
+%environment
+    export HUGGINGFACE_HUB_CACHE=/sdiff-webui/.cache/huggingface
+
+%startscript
+    cd /sdiff-webui
+    ./webui.sh --api --nowebui --no-hashing "${@}"
